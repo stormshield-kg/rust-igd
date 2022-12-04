@@ -9,7 +9,7 @@
 //! port mapping: External 1234 ---> 4321 Internal
 
 use std::env;
-use std::net::SocketAddrV4;
+use std::net::SocketAddr;
 
 use igd::aio::search_gateway;
 use igd::PortMappingProtocol;
@@ -27,7 +27,7 @@ async fn main() {
             return;
         }
     };
-    let ip: SocketAddrV4 = ip.parse().expect("Invalid socket address");
+    let ip: SocketAddr = ip.parse().expect("Invalid socket address");
 
     let _ = SimpleLogger::init(LevelFilter::Debug, LogConfig::default());
 

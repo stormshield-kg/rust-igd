@@ -1,6 +1,6 @@
 use std::net::{IpAddr, SocketAddr};
 
-extern crate igd;
+extern crate igd_next as igd;
 
 fn main() {
     match igd::search_gateway(Default::default()) {

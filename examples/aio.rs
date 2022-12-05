@@ -11,8 +11,8 @@
 use std::env;
 use std::net::SocketAddr;
 
-use igd::aio::search_gateway;
-use igd::PortMappingProtocol;
+use igd_tokio::aio::search_gateway;
+use igd_tokio::PortMappingProtocol;
 use simplelog::{Config as LogConfig, LevelFilter, SimpleLogger};
 
 #[tokio::main]
@@ -22,7 +22,7 @@ async fn main() {
         None => {
             println!("Local socket address is missing!");
             println!("This example requires a socket address representing the local machine and the port to bind to as an argument");
-            println!("Example: target/debug/examples/io 192.168.0.198:4321");
+            println!("Example: target/[debug or release]/examples/aio 192.168.0.198:4321");
             println!("Example: cargo run --features aio --example aio -- 192.168.0.198:4321");
             return;
         }

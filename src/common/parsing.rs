@@ -53,24 +53,21 @@ where
 }
 
 fn parse_device(device: &Element) -> Option<(String, String)> {
-    let services = device
-        .get_child("serviceList")
-        .map(|service_list| {
-            service_list
-                .children
-                .iter()
-                .filter_map(|child| {
-                    let child = child.as_element()?;
-                    if child.name == "service" {
-                        parse_service(child)
-                    } else {
-                        None
-                    }
-                })
-                .next()
-        })
-        .flatten();
-    let devices = device.get_child("deviceList").map(parse_device_list).flatten();
+    let services = device.get_child("serviceList").and_then(|service_list| {
+        service_list
+            .children
+            .iter()
+            .filter_map(|child| {
+                let child = child.as_element()?;
+                if child.name == "service" {
+                    parse_service(child)
+                } else {
+                    None
+                }
+            })
+            .next()
+    });
+    let devices = device.get_child("deviceList").and_then(parse_device_list);
     services.or(devices)
 }
 

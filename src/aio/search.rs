@@ -72,7 +72,7 @@ fn handle_broadcast_resp(from: &SocketAddr, data: &[u8]) -> Result<(SocketAddr, 
     // Parse socket address and path
     let (addr, root_url) = parsing::parse_search_result(text)?;
 
-    Ok((SocketAddr::V4(addr), root_url))
+    Ok((addr, root_url))
 }
 
 async fn get_control_urls(addr: &SocketAddr, path: &str) -> Result<(String, String), SearchError> {

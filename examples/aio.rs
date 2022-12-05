@@ -11,8 +11,8 @@
 use std::env;
 use std::net::SocketAddr;
 
-use igd_tokio::aio::search_gateway;
-use igd_tokio::PortMappingProtocol;
+use igd_next::aio::search_gateway;
+use igd_next::PortMappingProtocol;
 use simplelog::{Config as LogConfig, LevelFilter, SimpleLogger};
 
 #[tokio::main]

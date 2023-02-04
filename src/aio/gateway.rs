@@ -26,7 +26,7 @@ pub struct Gateway {
 
 impl Gateway {
     async fn perform_request(&self, header: &str, body: &str, ok: &str) -> Result<RequestReponse, RequestError> {
-        let url = format!("{}", self);
+        let url = format!("{self}");
         let text = soap::send_async(&url, soap::Action::new(header), body).await?;
         parsing::parse_response(text, ok)
     }
@@ -118,7 +118,7 @@ impl Gateway {
             // Fall back to using AddPortMapping with a random port.
             let gateway = self.clone();
             gateway
-                .retry_add_random_port_mapping(protocol, local_addr, lease_duration, &description)
+                .retry_add_random_port_mapping(protocol, local_addr, lease_duration, description)
                 .await
         }
     }
@@ -132,7 +132,7 @@ impl Gateway {
     ) -> Result<u16, AddAnyPortError> {
         for _ in 0u8..20u8 {
             match self
-                .add_random_port_mapping(protocol, local_addr, lease_duration, &description)
+                .add_random_port_mapping(protocol, local_addr, lease_duration, description)
                 .await
             {
                 Ok(port) => return Ok(port),

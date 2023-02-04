@@ -2,12 +2,18 @@ use std::collections::HashMap;
 use std::net::SocketAddr;
 
 use futures::prelude::*;
+#[cfg(feature = "hyper")]
 use hyper::Client;
-use tokio::net::UdpSocket;
-use tokio::time::timeout;
+
+#[cfg(feature = "tokio")]
+use tokio::{net::UdpSocket, time::timeout};
+
+#[cfg(feature = "async-std")]
+use async_std::{future::timeout, net::UdpSocket};
 
 use crate::aio::Gateway;
 use crate::common::{messages, parsing, SearchOptions};
+
 use crate::errors::SearchError;
 
 const MAX_RESPONSE_SIZE: usize = 1500;
@@ -67,7 +73,7 @@ fn handle_broadcast_resp(from: &SocketAddr, data: &[u8]) -> Result<(SocketAddr, 
     debug!("handling broadcast response from: {}", from);
 
     // Convert response to text
-    let text = std::str::from_utf8(&data).map_err(SearchError::from)?;
+    let text = std::str::from_utf8(data).map_err(SearchError::from)?;
 
     // Parse socket address and path
     let (addr, root_url) = parsing::parse_search_result(text)?;
@@ -75,39 +81,69 @@ fn handle_broadcast_resp(from: &SocketAddr, data: &[u8]) -> Result<(SocketAddr, 
     Ok((addr, root_url))
 }
 
+#[cfg(feature = "aio_tokio")]
 async fn get_control_urls(addr: &SocketAddr, path: &str) -> Result<(String, String), SearchError> {
-    let uri = match format!("http://{}{}", addr, path).parse() {
+    let uri = match format!("http://{addr}{path}").parse() {
         Ok(uri) => uri,
         Err(err) => return Err(SearchError::from(err)),
     };
 
-    debug!("requesting control url from: {}", uri);
+    debug!("requesting control url from: {uri}");
     let client = Client::new();
     let resp = hyper::body::to_bytes(client.get(uri).await?.into_body())
         .map_err(SearchError::from)
         .await?;
+
+    debug!("handling control response from: {addr}");
+    let c = std::io::Cursor::new(&resp);
+    parsing::parse_control_urls(c)
+}
+
+#[cfg(feature = "async-std")]
+async fn get_control_urls(addr: &SocketAddr, path: &str) -> Result<(String, String), SearchError> {
+    let uri = format!("http://{addr}{path}");
+
+    debug!("requesting control url from: {}", uri);
+
+    let resp = surf::get(uri).recv_bytes().await?;
 
     debug!("handling control response from: {}", addr);
     let c = std::io::Cursor::new(&resp);
     parsing::parse_control_urls(c)
 }
 
+#[cfg(feature = "aio_tokio")]
 async fn get_control_schemas(
     addr: &SocketAddr,
     control_schema_url: &str,
 ) -> Result<HashMap<String, Vec<String>>, SearchError> {
-    let uri = match format!("http://{}{}", addr, control_schema_url).parse() {
+    let uri = match format!("http://{addr}{control_schema_url}").parse() {
         Ok(uri) => uri,
         Err(err) => return Err(SearchError::from(err)),
     };
 
-    debug!("requesting control schema from: {}", uri);
+    debug!("requesting control schema from: {uri}");
     let client = Client::new();
     let resp = hyper::body::to_bytes(client.get(uri).await?.into_body())
         .map_err(SearchError::from)
         .await?;
 
-    debug!("handling schema response from: {}", addr);
+    debug!("handling schema response from: {addr}");
+    let c = std::io::Cursor::new(&resp);
+    parsing::parse_schemas(c)
+}
+
+#[cfg(feature = "async-std")]
+async fn get_control_schemas(
+    addr: &SocketAddr,
+    control_schema_url: &str,
+) -> Result<HashMap<String, Vec<String>>, SearchError> {
+    let uri = format!("http://{addr}{control_schema_url}");
+
+    debug!("requesting control schema from: {uri}");
+    let resp = surf::get(uri).recv_bytes().await?;
+
+    debug!("handling schema response from: {addr}");
     let c = std::io::Cursor::new(&resp);
     parsing::parse_schemas(c)
 }

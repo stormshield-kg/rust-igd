@@ -62,7 +62,7 @@ pub fn format_add_any_port_mapping_message(
                 "NewProtocol" => protocol.to_string(),
                 "NewRemoteHost" => "".to_string(),
                 unknown => {
-                    warn!("Unknown argument: {}", unknown);
+                    log::warn!("Unknown argument: {}", unknown);
                     return None;
                 }
             };
@@ -99,7 +99,7 @@ pub fn format_add_port_mapping_message(
                 "NewProtocol" => protocol.to_string(),
                 "NewRemoteHost" => "".to_string(),
                 unknown => {
-                    warn!("Unknown argument: {}", unknown);
+                    log::warn!("Unknown argument: {}", unknown);
                     return None;
                 }
             };
@@ -124,7 +124,7 @@ pub fn format_delete_port_message(schema: &[String], protocol: PortMappingProtoc
                 "NewProtocol" => protocol.to_string(),
                 "NewRemoteHost" => "".to_string(),
                 unknown => {
-                    warn!("Unknown argument: {}", unknown);
+                    log::warn!("Unknown argument: {}", unknown);
                     return None;
                 }
             };

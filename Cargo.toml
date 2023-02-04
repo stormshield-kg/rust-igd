@@ -3,7 +3,7 @@ authors = ["Darius C", "Simon Bernier St-Pierre <sbernierstpierre@gmail.com>"]
 description = "Internet Gateway Protocol client"
 edition = "2021"
 homepage = "https://github.com/dariusc93/rust-igd"
-keywords = ["igd", "upnp", "tokio"]
+keywords = ["igd", "upnp", "tokio", "async-std"]
 license = "MIT"
 name = "igd-next"
 readme = "README.md"
@@ -14,13 +14,16 @@ version = "0.12.0"
 all-features = true
 
 [dependencies]
-attohttpc = {version = "0.24", default-features = false}
-bytes = {version = "1", optional = true}
-futures = {version = "0.3", optional = true}
-http = {version = "0.2", optional = true}
+attohttpc = { version = "0.24", default-features = false }
+bytes = { version = "1", optional = true }
+futures = { version = "0.3", optional = true }
+http = { version = "0.2", optional = true }
 log = "0.4"
 rand = "0.8"
-tokio = {version = "1", optional = true, features = ["net"]}
+tokio = { version = "1", optional = true, features = ["net"] }
+async-std = { version = "1", optional = true }
+surf = { version = "2.3.2", optional = true }
+
 url = "2"
 xmltree = "0.10"
 
@@ -31,11 +34,13 @@ optional = true
 version = "0.14"
 
 [dev-dependencies]
-simplelog = "0.9"
-tokio = {version = "1", features = ["full"]}
+simplelog = "0.12"
+tokio = { version = "1", features = ["full"] }
+async-std = { version = "1", features = ["attributes"]}
 
 [features]
-aio = ["futures", "tokio", "hyper", "bytes", "http"]
+aio_tokio = ["futures", "tokio", "hyper", "bytes", "http"]
+aio_async_std = ["futures", "async-std", "surf", "bytes", "http"]
 default = []
 
 [[example]]
@@ -48,8 +53,12 @@ name = "add_port"
 name = "add_remove"
 
 [[example]]
-name = "aio"
-required-features = ["aio"]
+name = "aio_tokio"
+required-features = ["aio_tokio"]
+
+[[example]]
+name = "aio_astd"
+required-features = ["aio_async_std"]
 
 [[example]]
 name = "external_ip"

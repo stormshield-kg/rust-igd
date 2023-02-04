@@ -25,7 +25,7 @@ impl Gateway {
     fn perform_request(&self, header: &str, body: &str, ok: &str) -> RequestResult {
         let url = format!("http://{}{}", self.addr, self.control_url);
 
-        let response = attohttpc::post(&url)
+        let response = attohttpc::post(url)
             .header("SOAPAction", header)
             .header("Content-Type", "text/xml")
             .text(body)

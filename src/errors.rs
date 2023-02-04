@@ -77,17 +77,17 @@ impl From<Elapsed> for RequestError {
 impl fmt::Display for RequestError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
-            RequestError::AttoHttpError(ref e) => write!(f, "HTTP error {}", e),
-            RequestError::InvalidResponse(ref e) => write!(f, "Invalid response from gateway: {}", e),
-            RequestError::IoError(ref e) => write!(f, "IO error. {}", e),
-            RequestError::ErrorCode(n, ref e) => write!(f, "Gateway response error {}: {}", n, e),
-            RequestError::UnsupportedAction(ref e) => write!(f, "Gateway does not support action: {}", e),
+            RequestError::AttoHttpError(ref e) => write!(f, "HTTP error {e}"),
+            RequestError::InvalidResponse(ref e) => write!(f, "Invalid response from gateway: {e}"),
+            RequestError::IoError(ref e) => write!(f, "IO error. {e}"),
+            RequestError::ErrorCode(n, ref e) => write!(f, "Gateway response error {n}: {e}"),
+            RequestError::UnsupportedAction(ref e) => write!(f, "Gateway does not support action: {e}"),
             #[cfg(feature = "aio")]
-            RequestError::HyperError(ref e) => write!(f, "Hyper Error: {}", e),
+            RequestError::HyperError(ref e) => write!(f, "Hyper Error: {e}"),
             #[cfg(feature = "aio")]
-            RequestError::HttpError(ref e) => write!(f, "Http  Error: {}", e),
+            RequestError::HttpError(ref e) => write!(f, "Http  Error: {e}"),
             #[cfg(feature = "aio")]
-            RequestError::Utf8Error(ref e) => write!(f, "Utf8Error Error: {}", e),
+            RequestError::Utf8Error(ref e) => write!(f, "Utf8Error Error: {e}"),
         }
     }
 }
@@ -190,7 +190,7 @@ impl fmt::Display for GetExternalIpError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             GetExternalIpError::ActionNotAuthorized => write!(f, "The client is not authorized to remove the port"),
-            GetExternalIpError::RequestError(ref e) => write!(f, "Request Error. {}", e),
+            GetExternalIpError::RequestError(ref e) => write!(f, "Request Error. {e}"),
         }
     }
 }
@@ -212,7 +212,7 @@ impl fmt::Display for RemovePortError {
         match *self {
             RemovePortError::ActionNotAuthorized => write!(f, "The client is not authorized to remove the port"),
             RemovePortError::NoSuchPortMapping => write!(f, "The port was not mapped"),
-            RemovePortError::RequestError(ref e) => write!(f, "Request error. {}", e),
+            RemovePortError::RequestError(ref e) => write!(f, "Request error. {e}"),
         }
     }
 }
@@ -250,7 +250,7 @@ impl fmt::Display for AddAnyPortError {
             AddAnyPortError::DescriptionTooLong => {
                 write!(f, "The description was too long for the gateway to handle.")
             }
-            AddAnyPortError::RequestError(ref e) => write!(f, "Request error. {}", e),
+            AddAnyPortError::RequestError(ref e) => write!(f, "Request error. {e}"),
         }
     }
 }
@@ -283,7 +283,7 @@ impl fmt::Display for AddPortError {
                 "The gateway only supports permanent leases (ie. a `lease_duration` of 0),"
             ),
             AddPortError::DescriptionTooLong => write!(f, "The description was too long for the gateway to handle."),
-            AddPortError::RequestError(ref e) => write!(f, "Request error. {}", e),
+            AddPortError::RequestError(ref e) => write!(f, "Request error. {e}"),
         }
     }
 }
@@ -362,15 +362,15 @@ impl From<Elapsed> for SearchError {
 impl fmt::Display for SearchError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
-            SearchError::HttpError(ref e) => write!(f, "HTTP error {}", e),
+            SearchError::HttpError(ref e) => write!(f, "HTTP error {e}"),
             SearchError::InvalidResponse => write!(f, "Invalid response"),
-            SearchError::IoError(ref e) => write!(f, "IO error: {}", e),
-            SearchError::Utf8Error(ref e) => write!(f, "UTF-8 error: {}", e),
-            SearchError::XmlError(ref e) => write!(f, "XML error: {}", e),
+            SearchError::IoError(ref e) => write!(f, "IO error: {e}"),
+            SearchError::Utf8Error(ref e) => write!(f, "UTF-8 error: {e}"),
+            SearchError::XmlError(ref e) => write!(f, "XML error: {e}"),
             #[cfg(feature = "aio")]
-            SearchError::HyperError(ref e) => write!(f, "Hyper Error: {}", e),
+            SearchError::HyperError(ref e) => write!(f, "Hyper Error: {e}"),
             #[cfg(feature = "aio")]
-            SearchError::InvalidUri(ref e) => write!(f, "InvalidUri Error: {}", e),
+            SearchError::InvalidUri(ref e) => write!(f, "InvalidUri Error: {e}"),
         }
     }
 }

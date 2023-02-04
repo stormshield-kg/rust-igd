@@ -27,7 +27,7 @@ const MESSAGE_TAIL: &str = r#"</s:Body>
 </s:Envelope>"#;
 
 fn format_message(body: String) -> String {
-    format!("{}{}{}", MESSAGE_HEAD, body, MESSAGE_TAIL)
+    format!("{MESSAGE_HEAD}{body}{MESSAGE_TAIL}")
 }
 
 pub fn format_get_external_ip_message() -> String {
@@ -66,20 +66,15 @@ pub fn format_add_any_port_mapping_message(
                     return None;
                 }
             };
-            Some(format!(
-                "<{argument}>{value}</{argument}>",
-                argument = argument,
-                value = value
-            ))
+            Some(format!("<{argument}>{value}</{argument}>"))
         })
         .collect::<Vec<_>>()
         .join("\n");
 
     format_message(format!(
         r#"<u:AddAnyPortMapping xmlns:u="urn:schemas-upnp-org:service:WANIPConnection:1">
-        {}
+        {args}
         </u:AddAnyPortMapping>"#,
-        args,
     ))
 }
 
@@ -108,20 +103,15 @@ pub fn format_add_port_mapping_message(
                     return None;
                 }
             };
-            Some(format!(
-                "<{argument}>{value}</{argument}>",
-                argument = argument,
-                value = value
-            ))
+            Some(format!("<{argument}>{value}</{argument}>",))
         })
         .collect::<Vec<_>>()
         .join("\n");
 
     format_message(format!(
         r#"<u:AddPortMapping xmlns:u="urn:schemas-upnp-org:service:WANIPConnection:1">
-        {}
-        </u:AddPortMapping>"#,
-        args,
+        {args}
+        </u:AddPortMapping>"#
     ))
 }
 
@@ -138,28 +128,22 @@ pub fn format_delete_port_message(schema: &[String], protocol: PortMappingProtoc
                     return None;
                 }
             };
-            Some(format!(
-                "<{argument}>{value}</{argument}>",
-                argument = argument,
-                value = value
-            ))
+            Some(format!("<{argument}>{value}</{argument}>",))
         })
         .collect::<Vec<_>>()
         .join("\n");
 
     format_message(format!(
         r#"<u:DeletePortMapping xmlns:u="urn:schemas-upnp-org:service:WANIPConnection:1">
-        {}
-        </u:DeletePortMapping>"#,
-        args,
+        {args}
+        </u:DeletePortMapping>"#
     ))
 }
 
 pub fn formate_get_generic_port_mapping_entry_message(port_mapping_index: u32) -> String {
     format_message(format!(
         r#"<u:GetGenericPortMappingEntry xmlns:u="urn:schemas-upnp-org:service:WANIPConnection:1">
-        <NewPortMappingIndex>{}</NewPortMappingIndex>
-        </u:GetGenericPortMappingEntry>"#,
-        port_mapping_index
+        <NewPortMappingIndex>{port_mapping_index}</NewPortMappingIndex>
+        </u:GetGenericPortMappingEntry>"#
     ))
 }

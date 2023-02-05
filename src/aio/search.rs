@@ -11,6 +11,8 @@ use tokio::{net::UdpSocket, time::timeout};
 #[cfg(feature = "async-std")]
 use async_std::{future::timeout, net::UdpSocket};
 
+use log::debug;
+
 use crate::aio::Gateway;
 use crate::common::{messages, parsing, SearchOptions};
 

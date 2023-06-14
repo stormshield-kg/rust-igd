@@ -28,7 +28,7 @@ pub enum RequestError {
     #[cfg(feature = "aio_tokio")]
     HyperError(hyper::Error),
 
-    /// When using aio async std feature 
+    /// When using aio async std feature
     #[cfg(feature = "aio_async_std")]
     SurfError(surf::Error),
 

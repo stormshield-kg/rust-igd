@@ -81,14 +81,14 @@ impl From<FromUtf8Error> for RequestError {
     }
 }
 
-#[cfg(any(feature = "aio_async_std"))]
+#[cfg(feature = "aio_async_std")]
 impl From<TimeoutError> for RequestError {
     fn from(_err: TimeoutError) -> RequestError {
         RequestError::IoError(io::Error::new(io::ErrorKind::TimedOut, "timer failed"))
     }
 }
 
-#[cfg(any(feature = "aio_tokio"))]
+#[cfg(feature = "aio_tokio")]
 impl From<Elapsed> for RequestError {
     fn from(_err: Elapsed) -> RequestError {
         RequestError::IoError(io::Error::new(io::ErrorKind::TimedOut, "timer failed"))
@@ -388,7 +388,7 @@ impl From<hyper::http::uri::InvalidUri> for SearchError {
     }
 }
 
-#[cfg(any(feature = "aio_async_std"))]
+#[cfg(feature = "aio_async_std")]
 impl From<TimeoutError> for SearchError {
     fn from(_err: TimeoutError) -> SearchError {
         SearchError::IoError(io::Error::new(io::ErrorKind::TimedOut, "timer failed"))
@@ -452,8 +452,8 @@ pub enum GetGenericPortMappingEntryError {
 impl From<RequestError> for GetGenericPortMappingEntryError {
     fn from(err: RequestError) -> GetGenericPortMappingEntryError {
         match err {
-            RequestError::ErrorCode(code, _) if code == 606 => GetGenericPortMappingEntryError::ActionNotAuthorized,
-            RequestError::ErrorCode(code, _) if code == 713 => {
+            RequestError::ErrorCode(606, _) => GetGenericPortMappingEntryError::ActionNotAuthorized,
+            RequestError::ErrorCode(713, _) => {
                 GetGenericPortMappingEntryError::SpecifiedArrayIndexInvalid
             }
             other => GetGenericPortMappingEntryError::RequestError(other),

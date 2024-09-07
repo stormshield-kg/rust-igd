@@ -4,6 +4,7 @@ use std::time::Duration;
 /// Default timeout for a gateway search.
 pub const DEFAULT_TIMEOUT: Duration = Duration::from_secs(10);
 /// Timeout for each broadcast response during a gateway search.
+#[allow(dead_code)]
 pub const RESPONSE_TIMEOUT: Duration = Duration::from_secs(5);
 
 /// Gateway search configuration

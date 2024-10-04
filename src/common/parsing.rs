@@ -501,8 +501,7 @@ fn test_parse_device1() {
 
 #[test]
 fn test_parse_device2() {
-    let text = r#"
-    <?xml version="1.0" ?>
+    let text = r#"<?xml version="1.0" encoding="UTF-8"?>
     <root xmlns="urn:schemas-upnp-org:device-1-0">
         <specVersion>
             <major>1</major>

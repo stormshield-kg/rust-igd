@@ -16,7 +16,7 @@ use crate::gateway::Gateway;
 ///
 /// # Example
 /// ```no_run
-/// use igd::{search_gateway, SearchOptions, Result};
+/// use igd_next::{search_gateway, SearchOptions, Result};
 ///
 /// fn main() -> Result {
 ///     let gateway = search_gateway(Default::default())?;
